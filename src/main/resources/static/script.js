@@ -1,20 +1,58 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await fetch('http://localhost:8080/api/conversor/monedas-soportadas');
-        if (!response.ok) throw new Error("Error al cargar monedas");
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleFiltro = document.getElementById('toggleFiltro');
+    const selectOrigen = document.getElementById('monedaOrigen');
+    const selectDestino = document.getElementById('monedaDestino');
 
-        const monedas = await response.json();
-        const selectOrigen = document.getElementById('monedaOrigen');
-        const selectDestino = document.getElementById('monedaDestino');
+    // Carga inicial de monedas (todas)
+    cargarMonedas(false);
 
+    // Evento para el toggle
+    toggleFiltro.addEventListener('change', (e) => {
+        cargarMonedas(e.target.checked);
+    });
+
+    async function cargarMonedas(soloComunes) {
+        try {
+            // Mostrar estado de carga
+            selectOrigen.innerHTML = '<option value="" disabled selected>Cargando...</option>';
+            selectDestino.innerHTML = '<option value="" disabled selected>Cargando...</option>';
+
+            // Fetch a la API
+            const response = await fetch(`http://localhost:8080/api/conversor/monedas-soportadas?soloComunes=${soloComunes}`);
+            if (!response.ok) throw new Error("Error al cargar monedas");
+
+            const monedas = await response.json();
+
+            // Llenar selects
+            llenarSelect(selectOrigen, monedas);
+            llenarSelect(selectDestino, monedas);
+
+        } catch (error) {
+            console.error("Error:", error);
+            selectOrigen.innerHTML = '<option value="" disabled selected>Error al cargar</option>';
+            document.getElementById('error').textContent = "Error al cargar monedas. Recarga la página.";
+            document.getElementById('error').classList.remove('hidden');
+        }
+    }
+
+    function llenarSelect(selectElement, monedas) {
+        selectElement.innerHTML = '';
+
+        // Opción por defecto
+        const defaultOption = document.createElement('option');
+        defaultOption.value = "";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.textContent = "Selecciona moneda";
+        selectElement.appendChild(defaultOption);
+
+        // Opciones de monedas
         monedas.forEach(moneda => {
-            selectOrigen.add(new Option(moneda, moneda));
-            selectDestino.add(new Option(moneda, moneda));
+            const option = document.createElement('option');
+            option.value = moneda;
+            option.textContent = moneda;
+            selectElement.appendChild(option);
         });
-    } catch (error) {
-        console.error("Error:", error);
-        document.getElementById('error').textContent = "No se pudieron cargar las monedas. Recarga la página.";
-        document.getElementById('error').classList.remove('hidden');
     }
 });
 
@@ -59,3 +97,4 @@ document.getElementById('conversorForm').addEventListener('submit', async (e) =>
         document.getElementById('resultado').classList.add('hidden');
     }
 });
+

@@ -31,8 +31,9 @@ public class ConversorController {
 
     @Cacheable("monedas")
     @GetMapping("/monedas-soportadas")
-    public ResponseEntity<List<String>> getMonedasSoportadas() {
-        List<String> monedas = exchangeRateService.getMonedasSoportadas();
-        return ResponseEntity.ok(monedas);
+    public ResponseEntity<List<String>> getMonedasSoportadas(@RequestParam(required = false, defaultValue = "false") boolean soloComunes) {
+        return ResponseEntity.ok(
+                exchangeRateService.getMonedasSoportadas(soloComunes)
+        );
     }
 }

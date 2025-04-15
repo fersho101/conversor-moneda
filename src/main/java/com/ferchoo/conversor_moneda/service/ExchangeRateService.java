@@ -22,9 +22,8 @@ public class ExchangeRateService {
     @Value("${exchange-rate.api.key}")
     private String apiKey;
 
-    private static final List<String> MONEDAS_COMUNES = List.of(
-            "USD", "EUR", "MXN", "JPY", "CAD", "GBP", "CNY", "BRL", "COP", "RUB", "AED"
-    );
+
+    private final String API_URL = "https://v6.exchangerate-api.com/v6";
 
     public Double getTasaCambio(String monedaOrigen, String monedaDestino) {
         String url = String.format("%s/%s/pair/%s/%s", apiUrl, apiKey, monedaOrigen, monedaDestino);
@@ -49,12 +48,11 @@ public class ExchangeRateService {
 
     }
 
-    private final String API_URL = "https://v6.exchangerate-api.com/v6";
-
-    public List<String> getMonedasSoportadas() {
+//    @Cacheable(value = "monedas", key = "#filtarComunes")
+    public List<String> getMonedasSoportadas(boolean filtrarComunes) {
         String url = String.format("%s/%s/codes", API_URL, apiKey);
 
-        Map<String, Object> response = WebClient.create()
+        Map response = WebClient.create()
                 .get()
                 .uri(url)
                 .retrieve()
@@ -63,12 +61,29 @@ public class ExchangeRateService {
 
         if (response != null && response.containsKey("supported_codes")) {
             List<List<String>> supportedCodes = (List<List<String>>) response.get("supported_codes");
-            return supportedCodes.stream()
+            List<String> todasLasMonedas = supportedCodes.stream()
                     .map(codePair -> codePair.get(0))
                     .collect(Collectors.toList());
+
+            return filtrarComunes ?
+                    todasLasMonedas.stream().filter(MONEDAS_COMUNES::contains).toList() :
+                    todasLasMonedas;
         } else {
             throw new ExchangeRateException("No se pudieron obtener las monedas soportadas.");
         }
     }
+
+    public List<String> getMonedasComunes() {
+
+//        return this.getMonedasSoportadas(false).stream()
+//                .filter(MONEDAS_COMUNES::contains)
+//                .collect(Collectors.toList());
+        return getMonedasSoportadas(true);
+    }
+
+    private static final List<String> MONEDAS_COMUNES = List.of(
+            "USD", "EUR", "MXN", "JPY", "CAD", "GBP", "CNY", "BRL", "COP", "RUB", "AED"
+    );
+
 }
 
