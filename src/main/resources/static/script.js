@@ -1,9 +1,31 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('http://localhost:8080/api/conversor/monedas-soportadas');
+        if (!response.ok) throw new Error("Error al cargar monedas");
+
+        const monedas = await response.json();
+        const selectOrigen = document.getElementById('monedaOrigen');
+        const selectDestino = document.getElementById('monedaDestino');
+
+        monedas.forEach(moneda => {
+            selectOrigen.add(new Option(moneda, moneda));
+            selectDestino.add(new Option(moneda, moneda));
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        document.getElementById('error').textContent = "No se pudieron cargar las monedas. Recarga la página.";
+        document.getElementById('error').classList.remove('hidden');
+    }
+});
+
 document.getElementById('conversorForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const monedaOrigen = document.getElementById('monedaOrigen').value;
     const monedaDestino = document.getElementById('monedaDestino').value;
     const cantidad = document.getElementById('cantidad').value;
+
+
 
     try {
         const response = await fetch('http://localhost:8080/api/conversor/convertir', {

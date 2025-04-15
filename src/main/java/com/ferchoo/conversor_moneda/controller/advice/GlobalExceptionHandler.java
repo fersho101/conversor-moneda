@@ -12,10 +12,10 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExchangeRateException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public Map<String, String> handlerExchangeRateException(ExchangeRateException ex) {
         return Map.of(
-                "error", "Errror en la tasa de cambio",
+                "error", "Error al obtener monedas",
                 "message", ex.getMessage()
         );
     }
