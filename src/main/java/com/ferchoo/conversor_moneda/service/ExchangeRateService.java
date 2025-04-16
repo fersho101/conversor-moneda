@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 @Service
 public class ExchangeRateService {
 
-    @Value("${exchange-rate.api.url}")
+    @Value("${exchange.rate.api.url}")
     private String apiUrl;
 
-    @Value("${exchange-rate.api.key}")
+    @Value("${exchange.rate.api.key}")
     private String apiKey;
 
 

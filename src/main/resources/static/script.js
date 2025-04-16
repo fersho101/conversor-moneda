@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             selectDestino.innerHTML = '<option value="" disabled selected>Cargando...</option>';
 
             // Fetch a la API
-            const response = await fetch(`http://localhost:8080/api/conversor/monedas-soportadas?soloComunes=${soloComunes}`);
+            const response = await fetch(`https://conversor-moneda-production.up.railway.app/api/conversor/monedas-soportadas?soloComunes=${soloComunes}`);
             if (!response.ok) throw new Error("Error al cargar monedas");
 
             const monedas = await response.json();
@@ -66,7 +66,7 @@ document.getElementById('conversorForm').addEventListener('submit', async (e) =>
 
 
     try {
-        const response = await fetch('http://localhost:8080/api/conversor/convertir', {
+        const response = await fetch('https://conversor-moneda-production.up.railway.app/api/conversor/convertir', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

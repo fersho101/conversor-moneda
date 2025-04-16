@@ -21,10 +21,12 @@ public class ConversorMonedaApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:5500", "http://127.0.0.1:5500")
-                        .allowedMethods("GET", "POST")
-                        .allowedOrigins("http://localhost:63342")
-                        .allowedOrigins("https://67fee23c9d47503dcf7a1418--serene-kheer-333d39.netlify.app/");
+                        .allowedOrigins(
+                                "https://67ff44d354d743c72a41f629--warm-pasca-014f6f.netlify.app",
+                                "http://localhost:5500",
+                                "https://warm-pasca-014f6f.netlify.app/")
+                        .allowedMethods("GET", "POST", "OPTIONS")
+                        .allowedHeaders("*");
 
             }
         };
