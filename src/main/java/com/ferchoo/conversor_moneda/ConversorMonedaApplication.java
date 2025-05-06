@@ -22,11 +22,10 @@ public class ConversorMonedaApplication {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
                         .allowedOrigins(
-                                "https://67ff44d354d743c72a41f629--warm-pasca-014f6f.netlify.app",
                                 "http://localhost:5500",
-                                "https://warm-pasca-014f6f.netlify.app/")
+                                "https://681a17a2683089282906e1c4--dainty-cocada-4aadbb.netlify.app/")
                         .allowedMethods("GET", "POST", "OPTIONS")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*", "Content-Type");
 
             }
         };
