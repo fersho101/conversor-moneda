@@ -23,6 +23,7 @@ public class ConversorMonedaApplication {
                 registry.addMapping("/api/**")
                         .allowedOrigins(
                                 "http://localhost:5500",
+                                "https://dainty-cocada-4aadbb.netlify.app/",
                                 "https://681a17a2683089282906e1c4--dainty-cocada-4aadbb.netlify.app/")
                         .allowedMethods("GET", "POST", "OPTIONS")
                         .allowedHeaders("*", "Content-Type");
